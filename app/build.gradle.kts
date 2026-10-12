@@ -13,6 +13,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildFeatures { viewBinding = true }
@@ -44,4 +45,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.12.0")
     testImplementation("io.insert-koin:koin-test-junit4:3.5.6")
+
+    androidTestImplementation("androidx.test:core-ktx:1.5.0")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
 }

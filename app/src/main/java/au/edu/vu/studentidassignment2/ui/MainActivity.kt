@@ -2,6 +2,7 @@ package au.edu.vu.studentidassignment2.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     fun configureToolbar(title: Int, back: Boolean = false, dashboard: Boolean = false) {
         binding.toolbar.setTitle(title)
-        binding.toolbar.setNavigationIcon(if (back) R.drawable.ic_back else 0)
+        binding.toolbar.navigationIcon = if (back) AppCompatResources.getDrawable(this, R.drawable.ic_back) else null
         binding.toolbar.setNavigationContentDescription(R.string.back)
         binding.toolbar.menu.clear()
         if (dashboard) binding.toolbar.inflateMenu(R.menu.dashboard)

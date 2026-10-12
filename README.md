@@ -1,4 +1,5 @@
-# StudentIDAssignment2
+# StudentIDAssig
+nment2
 
 A native Kotlin Android application for NIT3213 Assignment 2. Sign in with your
 class credentials, browse your assigned collection, and open an item for its full
@@ -127,6 +128,16 @@ On macOS/Linux use `sh ./gradlew` in place of `.\gradlew.bat`.
 The debug APK is generated at `app/build/outputs/apk/debug/app-debug.apk`.
 Unit-test reports are under `app/build/reports/tests/testDebugUnitTest/` and lint
 reports under `app/build/reports/`.
+
+With a running emulator or connected device, also run the launch regression tests:
+
+```powershell
+.\gradlew.bat :app:connectedDebugAndroidTest
+```
+
+These device tests check real login-screen startup, blank fields, activity
+recreation, and location validation without making any API requests. Their report
+is under `app/build/reports/androidTests/connected/debug/`.
 
 Tests cover login validation, loading/authentication/dashboard transitions,
 failure and retry behavior, duplicate request suppression, empty dashboards,
