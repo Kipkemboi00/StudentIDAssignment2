@@ -1,0 +1,28 @@
+<resources>
+    <style name="Base.Theme.StudentIDAssignment2" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorOutline">@color/outline</item>
+        <item name="colorError">@color/error</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:navigationBarColor">@color/primary</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:fontFamily">sans</item>
+    </style>
+    <style name="Theme.StudentIDAssignment2" parent="Base.Theme.StudentIDAssignment2" />
+    <style name="Text.Course" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:letterSpacing">0.12</item>
+    </style>
+    <style name="Text.Heading" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="android:textColor">@color/on_surface</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Text.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/muted</item>
+    </style>
+</resources>

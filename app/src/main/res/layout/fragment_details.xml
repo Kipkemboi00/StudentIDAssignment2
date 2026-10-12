@@ -1,0 +1,11 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="24dp">
+        <TextView android:id="@+id/heading" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/details_heading"
+            android:textAppearance="@style/Text.Heading" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="10dp"
+            android:text="@string/details_intro" android:textAppearance="@style/Text.Body" />
+        <LinearLayout android:id="@+id/fields" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:layout_marginTop="28dp" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

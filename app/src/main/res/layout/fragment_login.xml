@@ -1,0 +1,51 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:padding="24dp">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="@string/course_label" android:textAppearance="@style/Text.Course" />
+        <TextView android:id="@+id/heading" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" android:text="@string/login_title" android:textAppearance="@style/Text.Heading" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:text="@string/login_intro" android:textAppearance="@style/Text.Body" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="28dp"
+            app:cardCornerRadius="24dp" app:cardElevation="0dp" app:strokeWidth="1dp" app:strokeColor="@color/outline">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="20dp">
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:labelFor="@id/location" android:text="@string/class_location" android:textAppearance="?attr/textAppearanceTitleSmall" />
+                <Spinner android:id="@+id/location" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="56dp" android:layout_marginBottom="16dp" android:spinnerMode="dropdown" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/username_layout" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:hint="@string/student_id" app:helperText="@string/student_id_help">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/username" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:inputType="number" android:singleLine="true" android:imeOptions="actionNext"
+                        android:importantForAutofill="no" android:saveEnabled="false" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/password_layout" style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp"
+                    android:hint="@string/first_name" app:helperText="@string/first_name_help" app:endIconMode="password_toggle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:inputType="textPassword" android:singleLine="true" android:imeOptions="actionDone"
+                        android:importantForAutofill="no" android:saveEnabled="false" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <TextView android:id="@+id/error" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" android:textColor="@color/error" android:accessibilityLiveRegion="polite" android:visibility="gone" />
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progress" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp" android:indeterminate="true" android:visibility="gone" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/login" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:minHeight="56dp" android:layout_marginTop="20dp" android:text="@string/login" app:cornerRadius="16dp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" android:text="@string/login_note" android:textAppearance="?attr/textAppearanceBodySmall" android:textColor="@color/muted" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

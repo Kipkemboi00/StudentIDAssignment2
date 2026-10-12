@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.StudentIDAssignment2" parent="Base.Theme.StudentIDAssignment2">
+        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>
