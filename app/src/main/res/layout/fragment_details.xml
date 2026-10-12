@@ -1,11 +1,31 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
     <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:orientation="vertical" android:padding="24dp">
-        <TextView android:id="@+id/heading" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="@string/details_heading" android:textAppearance="@style/Text.Heading" />
-        <LinearLayout android:id="@+id/fields" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="vertical" android:layout_marginTop="24dp" android:background="@drawable/bg_panel"
-            android:paddingHorizontal="20dp" android:paddingTop="4dp" />
+        android:orientation="vertical" android:paddingTop="12dp" android:paddingBottom="32dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp" android:background="@drawable/bg_details_hero"
+            android:orientation="vertical" android:padding="24dp">
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+                    android:text="@string/details_heading" android:textAppearance="@style/Text.Caption"
+                    android:textAllCaps="true" android:textColor="@color/lime" />
+                <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_collection"
+                    app:tint="@color/lime" android:importantForAccessibility="no" />
+            </LinearLayout>
+            <TextView android:id="@+id/heading" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="24dp" android:layout_marginBottom="12dp" android:text="@string/details_heading"
+                android:textAppearance="@style/Text.Heading" android:textColor="@color/on_primary" android:textSize="34sp"
+                android:maxLines="3" android:ellipsize="end" />
+        </LinearLayout>
+        <TextView android:id="@+id/facts_heading" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp" android:layout_marginTop="28dp" android:text="@string/overview_title"
+            android:textAppearance="@style/Text.Heading" android:textSize="25sp" />
+        <GridLayout android:id="@+id/fields" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp" android:layout_marginTop="14dp" android:columnCount="2"
+            android:background="@drawable/bg_panel" android:paddingStart="20dp" android:paddingEnd="8dp"
+            android:paddingTop="18dp" android:paddingBottom="2dp" />
+        <LinearLayout android:id="@+id/descriptions" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="vertical" android:layout_marginHorizontal="24dp" android:layout_marginTop="28dp" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

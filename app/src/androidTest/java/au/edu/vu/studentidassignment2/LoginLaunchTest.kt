@@ -2,6 +2,7 @@ package au.edu.vu.studentidassignment2
 
 import android.widget.Spinner
 import android.widget.TextView
+import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -26,6 +27,7 @@ class LoginLaunchTest {
                 assertTrue(activity.findViewById<TextInputEditText>(R.id.username).text.isNullOrEmpty())
                 assertTrue(activity.findViewById<TextInputEditText>(R.id.password).text.isNullOrEmpty())
                 assertNull(activity.findViewById<MaterialToolbar>(R.id.toolbar).navigationIcon)
+                assertEquals(View.GONE, activity.findViewById<MaterialToolbar>(R.id.toolbar).visibility)
                 assertEquals("Collections", activity.findViewById<MaterialToolbar>(R.id.toolbar).title.toString())
                 assertEquals(activity.getString(R.string.login), activity.findViewById<TextView>(R.id.heading).text.toString())
                 assertEquals(0, activity.findViewById<Spinner>(R.id.location).selectedItemPosition)

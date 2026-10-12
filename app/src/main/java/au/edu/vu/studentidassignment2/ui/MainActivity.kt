@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import au.edu.vu.studentidassignment2.R
@@ -35,7 +38,10 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) showLogin()
     }
 
-    fun configureToolbar(title: Int, back: Boolean = false, dashboard: Boolean = false) {
+    fun configureToolbar(title: Int, back: Boolean = false, dashboard: Boolean = false, visible: Boolean = true) {
+        binding.toolbar.isVisible = visible
+        window.statusBarColor = ContextCompat.getColor(this, if (visible) R.color.background else R.color.primary)
+        WindowInsetsControllerCompat(window, binding.root).isAppearanceLightStatusBars = visible
         binding.toolbar.setTitle(title)
         binding.toolbar.navigationIcon = if (back) AppCompatResources.getDrawable(this, R.drawable.ic_back) else null
         binding.toolbar.setNavigationContentDescription(R.string.back)

@@ -3,8 +3,13 @@
 A native Kotlin Android application for NIT3213 Assignment 2. Sign in with your
 class credentials, browse your assigned collection, and open an item for its full
 details. The Android Studio/Gradle project name is exactly `StudentIDAssignment2`.
-The installed app and its login toolbar are named **Collections**; coursework
+The installed app is named **Collections**; coursework
 identifiers are kept in the project documentation rather than the interface.
+
+The interface uses forest green, warm ivory and lime accents, serif headings,
+and an illustration drawn with Android vectors. Collection cards show names
+ahead of identifiers and use two columns on wider screens. Details separates
+short facts from the full description, with room for longer values and nested data.
 
 ## Requirements and setup
 
@@ -131,14 +136,15 @@ The debug APK is generated at `app/build/outputs/apk/debug/app-debug.apk`.
 Unit-test reports are under `app/build/reports/tests/testDebugUnitTest/` and lint
 reports under `app/build/reports/`.
 
-With a running emulator or connected device, also run the launch regression tests:
+With a running emulator or connected device, also run the screen regression tests:
 
 ```powershell
 .\gradlew.bat :app:connectedDebugAndroidTest
 ```
 
 These device tests check real login-screen startup, blank fields, activity
-recreation, and location validation without making any API requests. Their report
+recreation, location validation, collection cards, and complete Details rendering
+using local sample data without making any API requests. Their report
 is under `app/build/reports/androidTests/connected/debug/`.
 
 Tests cover login validation, loading/authentication/dashboard transitions,

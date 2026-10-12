@@ -33,8 +33,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         viewBinding = FragmentLoginBinding.bind(view)
         ViewCompat.setAccessibilityHeading(binding.heading, true)
         binding.location.adapter = ArrayAdapter.createFromResource(
-            requireContext(), R.array.class_locations, android.R.layout.simple_spinner_item
-        ).apply { setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item) }
+            requireContext(), R.array.class_locations, R.layout.item_location
+        ).apply { setDropDownViewResource(R.layout.item_location_dropdown) }
         if (savedInstanceState == null) {
             binding.location.setSelection(AppConfig.defaultLocation?.let { it.ordinal + 1 } ?: 0)
         }
@@ -51,7 +51,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onResume() {
         super.onResume()
-        (requireActivity() as MainActivity).configureToolbar(R.string.app_name)
+        (requireActivity() as MainActivity).configureToolbar(R.string.app_name, visible = false)
     }
 
     private fun submit() {

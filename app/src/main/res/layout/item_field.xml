@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+    android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"
+    android:paddingStart="0dp" android:paddingEnd="12dp" android:paddingBottom="18dp">
     <TextView android:id="@+id/label" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" android:textAppearance="@style/Text.Label" />
+        android:textAppearance="@style/Text.Caption" android:textAllCaps="true" />
     <TextView android:id="@+id/value" android:layout_width="match_parent" android:layout_height="wrap_content"
-        android:layout_marginTop="6dp" android:layout_marginBottom="20dp" android:textAppearance="?attr/textAppearanceBodyLarge"
-        android:lineSpacingExtra="4dp" android:textColor="@color/on_surface" android:textIsSelectable="true" />
-    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/outline" />
+        android:layout_marginTop="7dp" android:textAppearance="?attr/textAppearanceBodyLarge" android:lineSpacingExtra="4dp"
+        android:textColor="@color/on_surface" android:textIsSelectable="true" />
 </LinearLayout>

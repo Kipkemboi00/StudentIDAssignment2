@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import au.edu.vu.studentidassignment2.R
 import au.edu.vu.studentidassignment2.databinding.FragmentDashboardBinding
 import au.edu.vu.studentidassignment2.ui.MainActivity
@@ -27,7 +27,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         ViewCompat.setAccessibilityHeading(binding.heading, true)
         ViewCompat.setAccessibilityHeading(binding.messageTitle, true)
         entityAdapter = EntityAdapter { (requireActivity() as MainActivity).showDetails(it) }
-        binding.entities.layoutManager = LinearLayoutManager(requireContext())
+        binding.entities.layoutManager = GridLayoutManager(requireContext(), resources.getInteger(R.integer.collection_columns))
         binding.entities.adapter = entityAdapter
         binding.retry.setOnClickListener { viewModel.refresh() }
         viewLifecycleOwner.lifecycleScope.launch {
@@ -39,7 +39,7 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
 
     override fun onResume() {
         super.onResume()
-        (requireActivity() as MainActivity).configureToolbar(R.string.dashboard_title, dashboard = true)
+        (requireActivity() as MainActivity).configureToolbar(R.string.app_name, dashboard = true)
     }
 
     private fun render(state: DashboardState) {

@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">Collections</string>
+    <string name="login_hero">Your\ncollection.</string>
+    <string name="overview_title">Overview</string>
+    <string name="view_details">View details</string>
+    <string name="entity_label">Item</string>
     <string name="login_title">Sign in</string>
-    <string name="login_intro">Access your class collection.</string>
+    <string name="login_intro">Use your class details to continue.</string>
     <string name="class_location">Class location</string>
     <string-array name="class_locations">
         <item>Select your class location</item>
@@ -10,7 +14,7 @@
         <item>BR</item>
     </string-array>
     <string name="student_id">Student ID</string>
-    <string name="student_id_help">Enter your numeric ID without the s prefix.</string>
+    <string name="student_id_help">Digits only, without the s prefix.</string>
     <string name="first_name">Password</string>
     <string name="first_name_help">Your first name, with the required capitalization.</string>
     <string name="login">Sign in</string>
@@ -31,7 +35,6 @@
     <string name="error_unexpected">The service returned an unexpected response. Please try again.</string>
     <string name="error_session">Your session is no longer valid. Please sign in again.</string>
     <string name="error_dashboard_login">Sign-in succeeded, but the collection could not load. %1$s Tap Sign in to retry.</string>
-    <string name="dashboard_title">Dashboard</string>
     <string name="collection_heading">Your collection</string>
     <plurals name="entity_count">
         <item quantity="one">%1$d item · %2$d total</item>
