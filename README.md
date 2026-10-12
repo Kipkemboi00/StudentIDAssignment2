@@ -63,6 +63,8 @@ The base URL is configured in the same file:
    `GET /dashboard/{keypass}` before navigating. Errors distinguish rejected
    credentials, DNS failures, secure-connection failures, timeouts, other connection
    problems, server failures, and unexpected responses.
+   A request that takes longer than 10 seconds shows a waiting notice. Cancel
+   stops the request and restores the form, including during collection loading.
    If the dashboard request fails after authentication, the login screen explains
    the failure and allows another sign-in attempt.
 2. **Dashboard:** a RecyclerView displays entity summaries excluding the
@@ -144,7 +146,8 @@ With a running emulator or connected device, also run the screen regression test
 
 These device tests check real login-screen startup, blank fields, activity
 recreation, location validation, collection cards, and complete Details rendering
-using local sample data without making any API requests. Their report
+using local sample data, plus cancellation of a pending sign-in through a fake
+repository. They do not make API requests. Their report
 is under `app/build/reports/androidTests/connected/debug/`.
 
 Tests cover login validation, loading/authentication/dashboard transitions,
@@ -174,6 +177,13 @@ do not establish live API availability or acceptance of those credentials.
   If it cannot connect, check that device's network, VPN/proxy and DNS settings.
   A working connection on the host computer does not establish emulator access.
 - For a timeout, wait a moment and retry; the hosted service may be starting up.
+  Network limits in `AppConfig.kt` allow 30 seconds to connect, 180 seconds without
+  receiving response data, and 210 seconds for the complete HTTP call. This gives
+  a sleeping hosted service time to start while keeping every request bounded.
+  Authentication is not automatically replayed. A timeout cannot determine
+  whether credentials are correct. If the button says **Loading your collection**,
+  authentication already succeeded and the dashboard request is the slow stage.
+  Cancel remains available while waiting; rotation preserves the active request.
   For a secure-connection error, check the device date and time. Do not disable
   HTTPS certificate verification.
 - If Android displays **System UI isn't responding**, restart or cold boot the

@@ -14,6 +14,9 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.SocketPolicy
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -127,6 +130,27 @@ class ApiAssignmentRepositoryTest {
             fail("Cancellation should propagate")
         } catch (expected: CancellationException) {
             assertEquals("cancelled", expected.message)
+        }
+    }
+
+    @Test fun `a connected server that never responds yields a timeout without replaying login`() = runTest {
+        val client = OkHttpClient.Builder()
+            .readTimeout(200, TimeUnit.MILLISECONDS)
+            .callTimeout(5, TimeUnit.SECONDS)
+            .build()
+        val api = Retrofit.Builder().baseUrl(server.url("/"))
+            .client(client).addConverterFactory(GsonConverterFactory.create())
+            .build().create(AssignmentApi::class.java)
+        val stalled = ApiAssignmentRepository(api, DashboardParser())
+        server.enqueue(MockResponse().setSocketPolicy(SocketPolicy.NO_RESPONSE))
+        try {
+            val error = failure { stalled.authenticate(ClassLocation.FOOTSCRAY, "12345678", "TestName") }
+            assertEquals(FailureReason.TIMEOUT, error.reason)
+            assertNull(error.httpStatus)
+            assertEquals(1, server.requestCount)
+        } finally {
+            client.dispatcher.executorService.shutdown()
+            client.connectionPool.evictAll()
         }
     }
 

@@ -8,6 +8,10 @@ import au.edu.vu.studentidassignment2.domain.AppException
 import au.edu.vu.studentidassignment2.domain.Dashboard
 import au.edu.vu.studentidassignment2.domain.FailureReason
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -16,7 +20,7 @@ enum class InputError { LOCATION_REQUIRED, STUDENT_ID_REQUIRED, STUDENT_ID_FORMA
 
 sealed interface LoginState {
     data object Idle : LoginState
-    data class Loading(val fetchingDashboard: Boolean = false) : LoginState
+    data class Loading(val fetchingDashboard: Boolean = false, val takingLonger: Boolean = false) : LoginState
     data class InvalidInput(val error: InputError) : LoginState
     data class Error(
         val reason: FailureReason,
@@ -29,6 +33,7 @@ sealed interface LoginState {
 class LoginViewModel(private val repository: AssignmentRepository) : ViewModel() {
     private val mutableState = MutableStateFlow<LoginState>(LoginState.Idle)
     val state = mutableState.asStateFlow()
+    private var loginJob: Job? = null
 
     fun login(location: ClassLocation?, username: String, password: String) {
         if (state.value is LoginState.Loading || state.value is LoginState.Authenticated) return
@@ -45,24 +50,48 @@ class LoginViewModel(private val repository: AssignmentRepository) : ViewModel()
             return
         }
         mutableState.value = LoginState.Loading()
-        viewModelScope.launch {
+        loginJob = viewModelScope.launch {
             var fetchingDashboard = false
             try {
                 // Preserve password case and characters: the API is case sensitive.
-                val keypass = repository.authenticate(requireNotNull(location), studentId, password)
+                val keypass = requestStage(fetchingDashboard = false) {
+                    repository.authenticate(requireNotNull(location), studentId, password)
+                }
+                ensureActive()
                 fetchingDashboard = true
-                mutableState.value = LoginState.Loading(fetchingDashboard = true)
-                val dashboard = repository.loadDashboard(keypass)
+                val dashboard = requestStage(fetchingDashboard = true) { repository.loadDashboard(keypass) }
+                ensureActive()
                 mutableState.value = LoginState.Authenticated(keypass, dashboard)
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Exception) {
+                ensureActive()
                 mutableState.value = LoginState.Error(
                     (error as? AppException)?.reason ?: FailureReason.UNEXPECTED_RESPONSE,
                     dashboardRequest = fetchingDashboard,
                     httpStatus = (error as? AppException)?.httpStatus
                 )
             }
+        }
+    }
+
+    fun cancelLogin() {
+        if (state.value !is LoginState.Loading) return
+        loginJob?.cancel()
+        loginJob = null
+        mutableState.value = LoginState.Idle
+    }
+
+    private suspend fun <T> requestStage(fetchingDashboard: Boolean, request: suspend () -> T): T = coroutineScope {
+        mutableState.value = LoginState.Loading(fetchingDashboard)
+        val slowRequestNotice = launch {
+            delay(10_000)
+            mutableState.value = LoginState.Loading(fetchingDashboard, takingLonger = true)
+        }
+        try {
+            request()
+        } finally {
+            slowRequestNotice.cancel()
         }
     }
 

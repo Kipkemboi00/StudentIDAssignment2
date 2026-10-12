@@ -20,6 +20,9 @@
     <string name="login">Sign in</string>
     <string name="authenticating">Signing in…</string>
     <string name="fetching_dashboard">Loading your collection…</string>
+    <string name="cancel_login">Cancel</string>
+    <string name="signin_taking_longer">The sign-in service is taking longer to respond and may be starting up. This can take a few minutes. You can keep waiting or cancel.</string>
+    <string name="dashboard_taking_longer">Your sign-in was accepted. The collection is taking longer to load. You can keep waiting or cancel.</string>
     <string name="location_required">Select your class location before signing in.</string>
     <string name="id_required">Enter your student ID.</string>
     <string name="id_format">Use digits only, without an s prefix.</string>
@@ -28,7 +31,8 @@
     <string name="error_invalid_request">The service could not accept the sign-in request. Check the student ID and first-name format required by your class.</string>
     <string name="error_http_status">%1$s\n\nServer response: HTTP %2$d.</string>
     <string name="error_network">Could not connect. Check your internet connection and try again.</string>
-    <string name="error_timeout">The connection timed out. The service may be starting up. Wait a moment and try again.</string>
+    <string name="error_timeout">The service did not respond before the connection timed out. Check this device’s internet connection and try again.</string>
+    <string name="error_signin_timeout">The sign-in service did not respond before the connection timed out. Check this device’s internet connection and retry. A timeout does not tell us whether your sign-in details are correct.</string>
     <string name="error_dns">The API address could not be resolved. Check your device’s internet connection and DNS settings.</string>
     <string name="error_secure_connection">Could not establish a secure connection. Check your device’s date and time, then try again.</string>
     <string name="error_server">The service is temporarily unavailable. Please try again shortly.</string>

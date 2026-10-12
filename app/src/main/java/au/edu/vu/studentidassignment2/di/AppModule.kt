@@ -18,9 +18,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 val appModule = module {
     single {
         OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .callTimeout(90, TimeUnit.SECONDS)
+            .connectTimeout(AppConfig.CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(AppConfig.READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .callTimeout(AppConfig.CALL_TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .build()
     }
     single {

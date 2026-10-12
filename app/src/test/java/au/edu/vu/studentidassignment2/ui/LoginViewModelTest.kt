@@ -12,6 +12,7 @@ import au.edu.vu.studentidassignment2.ui.login.LoginViewModel
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
@@ -142,5 +143,82 @@ class LoginViewModelTest {
         viewModel.login(ClassLocation.BR, "12345678", "TestName")
         advanceUntilIdle()
         assertEquals(LoginState.Authenticated("test-topic", repository.dashboard), viewModel.state.value)
+    }
+
+    @Test fun `slow authentication shows waiting notice without submitting credentials again`() = runTest {
+        repository.authenticationGate = CompletableDeferred()
+        viewModel.login(ClassLocation.FOOTSCRAY, "12345678", "TestName")
+        runCurrent()
+        advanceTimeBy(10_000)
+        runCurrent()
+        assertEquals(LoginState.Loading(takingLonger = true), viewModel.state.value)
+        assertEquals(1, repository.authCalls)
+        repository.authenticationGate!!.complete("test-topic")
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value is LoginState.Authenticated)
+    }
+
+    @Test fun `dashboard receives its own slow request notice after authentication`() = runTest {
+        repository.authenticationGate = CompletableDeferred()
+        repository.dashboardGate = CompletableDeferred()
+        viewModel.login(ClassLocation.FOOTSCRAY, "12345678", "TestName")
+        runCurrent()
+        advanceTimeBy(8_000)
+        repository.authenticationGate!!.complete("test-topic")
+        runCurrent()
+        advanceTimeBy(9_000)
+        runCurrent()
+        assertEquals(LoginState.Loading(fetchingDashboard = true), viewModel.state.value)
+        advanceTimeBy(1_000)
+        runCurrent()
+        assertEquals(LoginState.Loading(fetchingDashboard = true, takingLonger = true), viewModel.state.value)
+        repository.dashboardGate!!.complete(repository.dashboard)
+        advanceUntilIdle()
+        assertTrue(viewModel.state.value is LoginState.Authenticated)
+    }
+
+    @Test fun `cancel stops authentication and allows a fresh attempt`() = runTest {
+        repository.authenticationGate = CompletableDeferred()
+        viewModel.login(ClassLocation.FOOTSCRAY, "12345678", "TestName")
+        runCurrent()
+        viewModel.cancelLogin()
+        repository.authenticationGate!!.complete("cancelled-topic")
+        advanceUntilIdle()
+        assertEquals(LoginState.Idle, viewModel.state.value)
+        assertEquals(0, repository.dashboardCalls)
+        repository.authenticationGate = null
+        viewModel.login(ClassLocation.FOOTSCRAY, "12345678", "TestName")
+        advanceUntilIdle()
+        assertEquals(LoginState.Authenticated("test-topic", repository.dashboard), viewModel.state.value)
+        assertEquals(2, repository.authCalls)
+    }
+
+    @Test fun `cancel during dashboard loading never navigates after a late response`() = runTest {
+        repository.dashboardGate = CompletableDeferred()
+        viewModel.login(ClassLocation.FOOTSCRAY, "12345678", "TestName")
+        runCurrent()
+        viewModel.cancelLogin()
+        repository.dashboardGate!!.complete(repository.dashboard)
+        advanceUntilIdle()
+        assertEquals(LoginState.Idle, viewModel.state.value)
+    }
+
+    @Test fun `authentication timeout is preserved and cancels the waiting notice`() = runTest {
+        repository.authError = AppException(FailureReason.TIMEOUT)
+        viewModel.login(ClassLocation.FOOTSCRAY, "12345678", "TestName")
+        advanceUntilIdle()
+        assertEquals(LoginState.Error(FailureReason.TIMEOUT), viewModel.state.value)
+        advanceTimeBy(20_000)
+        runCurrent()
+        assertEquals(LoginState.Error(FailureReason.TIMEOUT), viewModel.state.value)
+        assertEquals(1, repository.authCalls)
+        assertEquals(0, repository.dashboardCalls)
+    }
+
+    @Test fun `dashboard timeout remains distinct from an authentication timeout`() = runTest {
+        repository.dashboardError = AppException(FailureReason.TIMEOUT)
+        viewModel.login(ClassLocation.FOOTSCRAY, "12345678", "TestName")
+        advanceUntilIdle()
+        assertEquals(LoginState.Error(FailureReason.TIMEOUT, dashboardRequest = true), viewModel.state.value)
     }
 }

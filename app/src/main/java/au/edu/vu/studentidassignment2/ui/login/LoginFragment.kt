@@ -16,6 +16,7 @@ import au.edu.vu.studentidassignment2.R
 import au.edu.vu.studentidassignment2.config.AppConfig
 import au.edu.vu.studentidassignment2.config.ClassLocation
 import au.edu.vu.studentidassignment2.databinding.FragmentLoginBinding
+import au.edu.vu.studentidassignment2.domain.FailureReason
 import au.edu.vu.studentidassignment2.ui.MainActivity
 import au.edu.vu.studentidassignment2.ui.dashboard.DashboardViewModel
 import au.edu.vu.studentidassignment2.ui.failureMessage
@@ -39,6 +40,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             binding.location.setSelection(AppConfig.defaultLocation?.let { it.ordinal + 1 } ?: 0)
         }
         binding.login.setOnClickListener { submit() }
+        binding.cancelLogin.setOnClickListener { viewModel.cancelLogin() }
         binding.password.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) { submit(); true } else false
         }
@@ -64,6 +66,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun render(state: LoginState) {
         val loading = state is LoginState.Loading
         binding.progress.isVisible = loading
+        binding.cancelLogin.isVisible = loading
+        binding.loadingMessage.isVisible = state is LoginState.Loading && state.takingLonger
+        if (state is LoginState.Loading) {
+            binding.loadingMessage.setText(if (state.fetchingDashboard) R.string.dashboard_taking_longer else R.string.signin_taking_longer)
+        }
         binding.login.isEnabled = !loading
         binding.username.isEnabled = !loading
         binding.password.isEnabled = !loading
@@ -88,7 +95,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     InputError.LOCATION_REQUIRED -> Unit
                 }
             }
-            is LoginState.Error -> requireContext().failureMessage(state.reason).let { reason ->
+            is LoginState.Error -> (if (state.reason == FailureReason.TIMEOUT && !state.dashboardRequest) {
+                getString(R.string.error_signin_timeout)
+            } else requireContext().failureMessage(state.reason)).let { reason ->
                 val explanation = if (state.dashboardRequest) getString(R.string.error_dashboard_login, reason) else reason
                 state.httpStatus?.let { getString(R.string.error_http_status, explanation, it) } ?: explanation
             }

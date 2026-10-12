@@ -60,10 +60,16 @@
             <com.google.android.material.progressindicator.LinearProgressIndicator android:id="@+id/progress"
                 android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp"
                 android:indeterminate="true" android:visibility="gone" app:trackColor="@color/outline" app:trackCornerRadius="2dp" />
+            <TextView android:id="@+id/loading_message" android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:layout_marginTop="12dp" android:textAppearance="@style/Text.Body" android:textSize="14sp"
+                android:accessibilityLiveRegion="polite" android:visibility="gone" />
             <com.google.android.material.button.MaterialButton android:id="@+id/login"
                 android:layout_width="match_parent" android:layout_height="60dp" android:layout_marginTop="22dp"
                 android:text="@string/login" app:icon="@drawable/ic_arrow_forward" app:iconGravity="textEnd"
                 app:iconPadding="14dp" app:iconTint="@color/lime" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/cancel_login"
+                style="@style/Widget.Material3.Button.TextButton" android:layout_width="match_parent" android:layout_height="48dp"
+                android:layout_marginTop="8dp" android:text="@string/cancel_login" android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
 </androidx.core.widget.NestedScrollView>
