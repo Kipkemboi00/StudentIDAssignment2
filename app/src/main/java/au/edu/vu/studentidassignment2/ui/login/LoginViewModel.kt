@@ -18,7 +18,11 @@ sealed interface LoginState {
     data object Idle : LoginState
     data class Loading(val fetchingDashboard: Boolean = false) : LoginState
     data class InvalidInput(val error: InputError) : LoginState
-    data class Error(val reason: FailureReason, val dashboardRequest: Boolean = false) : LoginState
+    data class Error(
+        val reason: FailureReason,
+        val dashboardRequest: Boolean = false,
+        val httpStatus: Int? = null
+    ) : LoginState
     data class Authenticated(val keypass: String, val dashboard: Dashboard) : LoginState
 }
 
@@ -55,7 +59,8 @@ class LoginViewModel(private val repository: AssignmentRepository) : ViewModel()
             } catch (error: Exception) {
                 mutableState.value = LoginState.Error(
                     (error as? AppException)?.reason ?: FailureReason.UNEXPECTED_RESPONSE,
-                    dashboardRequest = fetchingDashboard
+                    dashboardRequest = fetchingDashboard,
+                    httpStatus = (error as? AppException)?.httpStatus
                 )
             }
         }

@@ -21,6 +21,8 @@
     <string name="id_format">Use digits only, without an s prefix.</string>
     <string name="password_required">Enter your first name with the required capitalization.</string>
     <string name="error_invalid_credentials">Sign-in failed. Check your student ID, first-name capitalization, and class location.</string>
+    <string name="error_invalid_request">The service could not accept the sign-in request. Check the student ID and first-name format required by your class.</string>
+    <string name="error_http_status">%1$s\n\nServer response: HTTP %2$d.</string>
     <string name="error_network">Could not connect. Check your internet connection and try again.</string>
     <string name="error_timeout">The connection timed out. The service may be starting up. Wait a moment and try again.</string>
     <string name="error_dns">The API address could not be resolved. Check your device’s internet connection and DNS settings.</string>

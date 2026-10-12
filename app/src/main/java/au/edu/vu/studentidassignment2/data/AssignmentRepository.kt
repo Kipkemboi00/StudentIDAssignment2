@@ -45,12 +45,13 @@ class ApiAssignmentRepository(
             throw error
         } catch (error: HttpException) {
             val reason = when {
-                authenticating && error.code() in listOf(400, 401, 403) -> FailureReason.INVALID_CREDENTIALS
+                authenticating && error.code() == 400 -> FailureReason.INVALID_REQUEST
+                authenticating && error.code() in listOf(401, 403) -> FailureReason.INVALID_CREDENTIALS
                 !authenticating && error.code() in listOf(401, 403) -> FailureReason.SESSION_EXPIRED
                 error.code() >= 500 -> FailureReason.SERVER
                 else -> FailureReason.UNEXPECTED_RESPONSE
             }
-            throw AppException(reason, error)
+            throw AppException(reason, error, httpStatus = error.code())
         } catch (error: JsonParseException) {
             throw AppException(FailureReason.UNEXPECTED_RESPONSE, error)
         } catch (error: MalformedJsonException) {

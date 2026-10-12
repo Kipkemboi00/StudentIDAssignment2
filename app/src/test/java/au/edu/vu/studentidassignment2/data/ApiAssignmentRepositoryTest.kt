@@ -60,12 +60,21 @@ class ApiAssignmentRepositoryTest {
     }
 
     @Test fun `authentication rejection maps to invalid credentials`() = runTest {
-        listOf(400, 401, 403).forEach { status ->
+        listOf(401, 403).forEach { status ->
             server.enqueue(MockResponse().setResponseCode(status))
-            assertEquals(FailureReason.INVALID_CREDENTIALS, failure {
+            val error = failure {
                 repository.authenticate(ClassLocation.BR, "12345678", "TestName")
-            }.reason)
+            }
+            assertEquals(FailureReason.INVALID_CREDENTIALS, error.reason)
+            assertEquals(status, error.httpStatus)
         }
+    }
+
+    @Test fun `bad request is distinguished from rejected credentials and preserves HTTP status`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(400))
+        val error = failure { repository.authenticate(ClassLocation.FOOTSCRAY, "12345678", "TestName") }
+        assertEquals(FailureReason.INVALID_REQUEST, error.reason)
+        assertEquals(400, error.httpStatus)
     }
 
     @Test fun `server failure and expired session remain distinguishable`() = runTest {

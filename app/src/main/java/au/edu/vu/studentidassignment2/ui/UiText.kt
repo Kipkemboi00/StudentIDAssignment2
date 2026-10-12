@@ -6,6 +6,7 @@ import au.edu.vu.studentidassignment2.domain.FailureReason
 import java.util.Locale
 
 fun Context.failureMessage(reason: FailureReason): String = getString(when (reason) {
+    FailureReason.INVALID_REQUEST -> R.string.error_invalid_request
     FailureReason.INVALID_CREDENTIALS -> R.string.error_invalid_credentials
     FailureReason.NETWORK -> R.string.error_network
     FailureReason.TIMEOUT -> R.string.error_timeout

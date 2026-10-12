@@ -88,8 +88,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     InputError.LOCATION_REQUIRED -> Unit
                 }
             }
-            is LoginState.Error -> requireContext().failureMessage(state.reason).let {
-                if (state.dashboardRequest) getString(R.string.error_dashboard_login, it) else it
+            is LoginState.Error -> requireContext().failureMessage(state.reason).let { reason ->
+                val explanation = if (state.dashboardRequest) getString(R.string.error_dashboard_login, reason) else reason
+                state.httpStatus?.let { getString(R.string.error_http_status, explanation, it) } ?: explanation
             }
             else -> null
         }

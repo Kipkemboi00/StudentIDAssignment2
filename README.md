@@ -159,8 +159,10 @@ do not establish live API availability or acceptance of those credentials.
 
 - Select your actual class location and use your numeric student ID (no `s`).
   The password is your first name with the capitalization required by your class.
-- A rejected-credentials message means the authentication endpoint returned
-  HTTP 400, 401, or 403. Confirm your details and campus with your class materials.
+- HTTP 400 produces a request-format error; HTTP 401 or 403 produces a
+  sign-in-details rejection. The login error includes the HTTP status so it can
+  be reported without sharing credentials. These statuses alone do not identify
+  which input is incorrect. Confirm your details and campus with your class materials.
 - A connection error is different from rejected credentials. Open
   `https://nit3213apinew.onrender.com/` in the **device or emulator's browser**.
   If it cannot connect, check that device's network, VPN/proxy and DNS settings.

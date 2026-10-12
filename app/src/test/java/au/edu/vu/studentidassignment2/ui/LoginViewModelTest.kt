@@ -93,6 +93,14 @@ class LoginViewModelTest {
         assertEquals(LoginState.Error(FailureReason.NETWORK), viewModel.state.value)
     }
 
+    @Test fun `authentication HTTP status reaches error state without loading dashboard`() = runTest {
+        repository.authError = AppException(FailureReason.INVALID_CREDENTIALS, httpStatus = 401)
+        viewModel.login(ClassLocation.FOOTSCRAY, "12345678", "TestName")
+        advanceUntilIdle()
+        assertEquals(LoginState.Error(FailureReason.INVALID_CREDENTIALS, httpStatus = 401), viewModel.state.value)
+        assertEquals(0, repository.dashboardCalls)
+    }
+
     @Test fun `dashboard failure after auth keeps user on login with retryable error`() = runTest {
         repository.dashboardError = AppException(FailureReason.SERVER)
         viewModel.login(ClassLocation.BR, "12345678", "TestName")

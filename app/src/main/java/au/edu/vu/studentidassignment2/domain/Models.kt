@@ -11,7 +11,11 @@ data class Entity(val fields: List<EntityField>, val rawJson: String) {
 data class Dashboard(val entities: List<Entity>, val entityTotal: Int)
 
 enum class FailureReason {
-    INVALID_CREDENTIALS, NETWORK, TIMEOUT, DNS, SECURE_CONNECTION, SERVER, UNEXPECTED_RESPONSE, SESSION_EXPIRED
+    INVALID_REQUEST, INVALID_CREDENTIALS, NETWORK, TIMEOUT, DNS, SECURE_CONNECTION, SERVER, UNEXPECTED_RESPONSE, SESSION_EXPIRED
 }
 
-class AppException(val reason: FailureReason, cause: Throwable? = null) : Exception(reason.name, cause)
+class AppException(
+    val reason: FailureReason,
+    cause: Throwable? = null,
+    val httpStatus: Int? = null
+) : Exception(reason.name, cause)
