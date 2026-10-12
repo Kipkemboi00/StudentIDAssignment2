@@ -8,6 +8,9 @@ import java.util.Locale
 fun Context.failureMessage(reason: FailureReason): String = getString(when (reason) {
     FailureReason.INVALID_CREDENTIALS -> R.string.error_invalid_credentials
     FailureReason.NETWORK -> R.string.error_network
+    FailureReason.TIMEOUT -> R.string.error_timeout
+    FailureReason.DNS -> R.string.error_dns
+    FailureReason.SECURE_CONNECTION -> R.string.error_secure_connection
     FailureReason.SERVER -> R.string.error_server
     FailureReason.UNEXPECTED_RESPONSE -> R.string.error_unexpected
     FailureReason.SESSION_EXPIRED -> R.string.error_session

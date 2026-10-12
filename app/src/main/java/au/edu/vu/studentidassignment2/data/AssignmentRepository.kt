@@ -8,6 +8,9 @@ import com.google.gson.JsonParseException
 import com.google.gson.stream.MalformedJsonException
 import java.io.EOFException
 import java.io.IOException
+import java.io.InterruptedIOException
+import java.net.UnknownHostException
+import javax.net.ssl.SSLException
 import kotlinx.coroutines.CancellationException
 import retrofit2.HttpException
 
@@ -54,6 +57,12 @@ class ApiAssignmentRepository(
             throw AppException(FailureReason.UNEXPECTED_RESPONSE, error)
         } catch (error: EOFException) {
             throw AppException(FailureReason.UNEXPECTED_RESPONSE, error)
+        } catch (error: UnknownHostException) {
+            throw AppException(FailureReason.DNS, error)
+        } catch (error: SSLException) {
+            throw AppException(FailureReason.SECURE_CONNECTION, error)
+        } catch (error: InterruptedIOException) {
+            throw AppException(FailureReason.TIMEOUT, error)
         } catch (error: IOException) {
             throw AppException(FailureReason.NETWORK, error)
         } catch (error: Exception) {

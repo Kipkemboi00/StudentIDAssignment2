@@ -26,6 +26,8 @@ class LoginLaunchTest {
                 assertTrue(activity.findViewById<TextInputEditText>(R.id.username).text.isNullOrEmpty())
                 assertTrue(activity.findViewById<TextInputEditText>(R.id.password).text.isNullOrEmpty())
                 assertNull(activity.findViewById<MaterialToolbar>(R.id.toolbar).navigationIcon)
+                assertEquals("Collections", activity.findViewById<MaterialToolbar>(R.id.toolbar).title.toString())
+                assertEquals(activity.getString(R.string.login), activity.findViewById<TextView>(R.id.heading).text.toString())
                 assertEquals(0, activity.findViewById<Spinner>(R.id.location).selectedItemPosition)
             }
         }

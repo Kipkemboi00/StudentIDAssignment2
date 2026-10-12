@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">StudentIDAssignment2</string>
-    <string name="login_title">Your next discovery</string>
-    <string name="login_intro">Sign in to explore the collection assigned to your class.</string>
-    <string name="course_label">NIT3213 · ASSIGNMENT 2</string>
+    <string name="app_name">Collections</string>
+    <string name="login_title">Sign in</string>
+    <string name="login_intro">Access your class collection.</string>
     <string name="class_location">Class location</string>
     <string-array name="class_locations">
         <item>Select your class location</item>
@@ -12,35 +11,39 @@
     </string-array>
     <string name="student_id">Student ID</string>
     <string name="student_id_help">Enter your numeric ID without the s prefix.</string>
-    <string name="first_name">First name (password)</string>
-    <string name="first_name_help">Use the exact capitalization required by your class.</string>
+    <string name="first_name">Password</string>
+    <string name="first_name_help">Your first name, with the required capitalization.</string>
     <string name="login">Sign in</string>
     <string name="authenticating">Signing in…</string>
     <string name="fetching_dashboard">Loading your collection…</string>
-    <string name="login_note">Choose the location of your class. Your first name is case sensitive.</string>
     <string name="location_required">Select your class location before signing in.</string>
     <string name="id_required">Enter your student ID.</string>
     <string name="id_format">Use digits only, without an s prefix.</string>
     <string name="password_required">Enter your first name with the required capitalization.</string>
     <string name="error_invalid_credentials">Sign-in failed. Check your student ID, first-name capitalization, and class location.</string>
     <string name="error_network">Could not connect. Check your internet connection and try again.</string>
+    <string name="error_timeout">The connection timed out. The service may be starting up. Wait a moment and try again.</string>
+    <string name="error_dns">The API address could not be resolved. Check your device’s internet connection and DNS settings.</string>
+    <string name="error_secure_connection">Could not establish a secure connection. Check your device’s date and time, then try again.</string>
     <string name="error_server">The service is temporarily unavailable. Please try again shortly.</string>
     <string name="error_unexpected">The service returned an unexpected response. Please try again.</string>
     <string name="error_session">Your session is no longer valid. Please sign in again.</string>
     <string name="error_dashboard_login">Sign-in succeeded, but the collection could not load. %1$s Tap Sign in to retry.</string>
     <string name="dashboard_title">Dashboard</string>
     <string name="collection_heading">Your collection</string>
-    <string name="collection_intro">A closer look starts with a single tap.</string>
-    <string name="entity_count">Shown: %1$d · Total: %2$d</string>
-    <string name="empty_title">Nothing here yet</string>
+    <plurals name="entity_count">
+        <item quantity="one">%1$d item · %2$d total</item>
+        <item quantity="other">%1$d items · %2$d total</item>
+    </plurals>
+    <string name="empty_title">No items</string>
     <string name="empty_message">The service returned an empty collection. Refresh to check again.</string>
     <string name="request_failed">Could not load your collection</string>
     <string name="retry">Try again</string>
     <string name="refresh">Refresh</string>
     <string name="sign_out">Sign out</string>
     <string name="details_title">Details</string>
-    <string name="details_heading">The full picture</string>
-    <string name="details_intro">All available information for this item.</string>
+    <string name="details_heading">Item details</string>
+    <string name="item_number">%1$02d</string>
     <string name="entity_fallback">Item %1$d</string>
     <string name="no_summary">Open this item to read its available information.</string>
     <string name="no_value">Not provided</string>

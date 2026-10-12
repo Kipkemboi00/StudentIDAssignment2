@@ -29,6 +29,7 @@ class EntityAdapter(private val onClick: (Entity) -> Unit) : ListAdapter<Entity,
             val titleField = fields.firstOrNull { !it.value.isNullOrBlank() }
             val title = titleField?.value ?: context.getString(R.string.entity_fallback, position + 1)
             binding.title.text = title
+            binding.number.text = context.getString(R.string.item_number, position + 1)
             binding.summary.text = fields.filter { it !== titleField }.take(3)
                 .joinToString("\n") { "${fieldLabel(it.name)}: ${context.fieldValue(it.value)}" }
                 .ifBlank { context.getString(R.string.no_summary) }

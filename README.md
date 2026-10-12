@@ -1,9 +1,10 @@
-# StudentIDAssig
-nment2
+# StudentIDAssignment2
 
 A native Kotlin Android application for NIT3213 Assignment 2. Sign in with your
 class credentials, browse your assigned collection, and open an item for its full
 details. The Android Studio/Gradle project name is exactly `StudentIDAssignment2`.
+The installed app and its login toolbar are named **Collections**; coursework
+identifiers are kept in the project documentation rather than the interface.
 
 ## Requirements and setup
 
@@ -55,7 +56,8 @@ The base URL is configured in the same file:
    `password` to the selected class endpoint. Separate progress messages cover
    authentication and loading the collection. The returned `keypass` is used in
    `GET /dashboard/{keypass}` before navigating. Errors distinguish rejected
-   credentials, connection problems, server failures, and unexpected responses.
+   credentials, DNS failures, secure-connection failures, timeouts, other connection
+   problems, server failures, and unexpected responses.
    If the dashboard request fails after authentication, the login screen explains
    the failure and allows another sign-in attempt.
 2. **Dashboard:** a RecyclerView displays entity summaries excluding the
@@ -152,6 +154,25 @@ enter your own credentials, inspect summaries and details, refresh, rotate the
 device, navigate back, and sign out. Check the error state with networking disabled.
 Successful live authentication requires valid class credentials; automated tests
 do not establish live API availability or acceptance of those credentials.
+
+### Troubleshooting sign-in
+
+- Select your actual class location and use your numeric student ID (no `s`).
+  The password is your first name with the capitalization required by your class.
+- A rejected-credentials message means the authentication endpoint returned
+  HTTP 400, 401, or 403. Confirm your details and campus with your class materials.
+- A connection error is different from rejected credentials. Open
+  `https://nit3213apinew.onrender.com/` in the **device or emulator's browser**.
+  If it cannot connect, check that device's network, VPN/proxy and DNS settings.
+  A working connection on the host computer does not establish emulator access.
+- For a timeout, wait a moment and retry; the hosted service may be starting up.
+  For a secure-connection error, check the device date and time. Do not disable
+  HTTPS certificate verification.
+- If Android displays **System UI isn't responding**, restart or cold boot the
+  emulator from Device Manager. That system dialog is separate from an API error.
+  If the computer is short of RAM, close unused applications or use a physical
+  Android device. After a command-line build, `./gradlew --stop` (Windows:
+  `.\gradlew.bat --stop`) releases idle Gradle daemons.
 
 ## Version control and submission
 

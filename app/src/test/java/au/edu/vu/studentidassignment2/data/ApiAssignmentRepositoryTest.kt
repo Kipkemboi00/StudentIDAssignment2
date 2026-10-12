@@ -6,6 +6,10 @@ import au.edu.vu.studentidassignment2.domain.FailureReason
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import java.io.IOException
+import java.io.InterruptedIOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import javax.net.ssl.SSLHandshakeException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -90,6 +94,21 @@ class ApiAssignmentRepositoryTest {
     @Test fun `transport IOException maps to network error`() = runTest {
         val failing = ApiAssignmentRepository(FailingApi(IOException("offline")), DashboardParser())
         assertEquals(FailureReason.NETWORK, failure { failing.loadDashboard("topic") }.reason)
+    }
+
+    @Test fun `connection failures distinguish DNS TLS and timeout from rejected credentials`() = runTest {
+        val failures = listOf(
+            UnknownHostException("unresolved") to FailureReason.DNS,
+            SSLHandshakeException("handshake failed") to FailureReason.SECURE_CONNECTION,
+            SocketTimeoutException("read timed out") to FailureReason.TIMEOUT,
+            InterruptedIOException("call timed out") to FailureReason.TIMEOUT
+        )
+        failures.forEach { (cause, reason) ->
+            val failing = ApiAssignmentRepository(FailingApi(cause), DashboardParser())
+            val error = failure { failing.authenticate(ClassLocation.BR, "12345678", "TestName") }
+            assertEquals(reason, error.reason)
+            assertSame(cause, error.cause)
+        }
     }
 
     @Test fun `coroutine cancellation is propagated without wrapping`() = runTest {

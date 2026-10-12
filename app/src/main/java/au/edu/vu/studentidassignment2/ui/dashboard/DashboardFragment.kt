@@ -50,11 +50,12 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
         when (state) {
             is DashboardState.Content -> {
                 entityAdapter?.submitList(state.dashboard.entities)
-                binding.count.text = getString(R.string.entity_count, state.dashboard.entities.size, state.dashboard.entityTotal)
+                val count = state.dashboard.entities.size
+                binding.count.text = resources.getQuantityString(R.plurals.entity_count, count, count, state.dashboard.entityTotal)
             }
             is DashboardState.Empty -> {
                 entityAdapter?.submitList(emptyList())
-                binding.count.text = getString(R.string.entity_count, 0, state.entityTotal)
+                binding.count.text = resources.getQuantityString(R.plurals.entity_count, 0, 0, state.entityTotal)
                 binding.messageTitle.setText(R.string.empty_title)
                 binding.messageBody.setText(R.string.empty_message)
                 binding.retry.setText(R.string.refresh)
