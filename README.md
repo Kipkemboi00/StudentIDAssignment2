@@ -1,125 +1,118 @@
 # StudentIDAssignment2
 
-A native Kotlin Android application for NIT3213 Assignment 2. Sign in with your
-class credentials, browse your assigned collection, and open an item for its full
-details. The Android Studio/Gradle project name is exactly `StudentIDAssignment2`.
-The installed app is named **Collections**; coursework
-identifiers are kept in the project documentation rather than the interface.
+This is my Android application for NIT3213 Assignment 2. I used Kotlin to build
+three screens: Login, Dashboard and Details. The project is called
+`StudentIDAssignment2` in Android Studio, and the installed app is called
+**Collections**.
 
-The interface uses forest green, warm ivory and lime accents, serif headings,
-and an illustration drawn with Android vectors. Collection cards show names
-ahead of identifiers and use two columns on wider screens. Details separates
-short facts from the full description, with room for longer values and nested data.
+The app connects to the assignment API to sign in and display the collection
+assigned to the user. I used forest green, ivory and lime colours, with cards for
+the collection and a separate page for each item's full details.
 
-## Requirements and setup
+## What the app does
 
-- Android Studio with Android Gradle Plugin 8.5 support (Koala or newer).
-- **JDK 17** selected under Settings → Build, Execution, Deployment → Build Tools
-  → Gradle → Gradle JDK. For command-line builds, set `JAVA_HOME` to your JDK 17
-  installation. No machine-specific JDK path is committed.
-- Android SDK Platform **34** and Build Tools **34.0.0**, installed using SDK Manager.
-- An emulator or Android device running Android 8.0 / API 26 or later.
-- Internet access for the first Gradle sync and for the running application's API.
+- **Login:** checks the required inputs, signs in using the selected class
+  location, and uses the returned `keypass` to load the dashboard. The form shows
+  progress and errors, and a pending request can be cancelled.
+- **Dashboard:** shows the returned entities in a RecyclerView. Each card gives a
+  summary without the description. The screen includes the item count, refresh,
+  sign out, and messages for empty results or a failed request.
+- **Details:** opens the selected item and displays all its fields, including its
+  description. Missing values have a placeholder, and nested data is formatted
+  so it can still be read.
 
-Open this repository's root folder in Android Studio and allow Gradle to sync.
-Android Studio normally creates `local.properties` with the SDK directory. If
-building outside the IDE, set `ANDROID_HOME` to your SDK directory or create an
-ignored `local.properties` containing `sdk.dir=/path/to/your/Android/Sdk` (use
-forward slashes on Windows). Select the `app` run configuration and a device,
-then press Run.
+The API can return different fields for different topics, so I kept the entity
+model flexible rather than building the screens around one fixed set of fields.
 
-The checked-in Gradle wrapper uses Gradle 8.7. Kotlin is 1.9.24; the app compiles
-and targets API 34. You do not need a global Gradle installation, API key, or
-additional service account.
+## Opening and running the project
 
-## Login and class location
+You will need:
 
-Both login fields start **blank**. Enter your own:
+- Android Studio with support for Android Gradle Plugin 8.5.2.
+- JDK 17.
+- Android SDK Platform 34 and Build Tools 34.0.0.
+- An emulator or phone running Android 8.0 (API 26) or later.
+- Internet access to download dependencies and use the API.
 
-- **Student ID:** digits only, without the `s` prefix. Surrounding whitespace is
-  removed; prefixed or nonnumeric IDs are rejected before any request.
-- **Password:** your first name, with the exact capitalization required by your
-  class. It is case sensitive and is sent as entered.
-- **Class location:** choose Footscray, Sydney, or BR using the login selector.
+The project uses Kotlin 1.9.24 and Gradle 8.7. The Gradle wrapper is included.
 
-Neither assignment reference identifies the student's actual class location.
-Consequently the location selector starts with **Select your class location**;
-no campus is silently assumed. The single configuration file is:
+1. Open the repository's root folder in Android Studio, where
+   `settings.gradle.kts` is located.
+2. Allow the Gradle sync to finish. Install any missing SDK components when
+   Android Studio prompts for them.
+3. In **Settings > Build, Execution, Deployment > Build Tools > Gradle**, select
+   **JDK 17** as the Gradle JDK.
+4. Select the **app** run configuration and your emulator or connected phone,
+   then click **Run**.
 
-`app/src/main/java/au/edu/vu/studentidassignment2/config/AppConfig.kt`
+Android Studio normally creates `local.properties` with the SDK location. For a
+command-line build, set `JAVA_HOME` to JDK 17 and either set `ANDROID_HOME` or
+provide the SDK path in `local.properties`. Use forward slashes in Windows SDK
+paths. No API key or extra account setup is needed for the app.
 
-Leave `defaultLocation = null` to require a choice, or set it to
-`ClassLocation.FOOTSCRAY`, `ClassLocation.SYDNEY`, or `ClassLocation.BR` once your
-actual location is known. The selector remains available to correct the choice.
-The corresponding API paths are `/footscray/auth`, `/sydney/auth`, and `/br/auth`.
-The base URL is configured in the same file:
-`https://nit3213apinew.onrender.com/`.
+I also tested the app on a Samsung phone. To run it wirelessly on Android 11 or
+later, connect the phone and computer to the same Wi-Fi network, enable
+**Wireless debugging** in the phone's Developer options, and use **Pair Devices
+Using Wi-Fi** in Android Studio. After pairing, select the phone as the run target.
 
-## Application behavior
+## Signing in
 
-1. **Login:** validates input and POSTs a JSON object containing `username` and
-   `password` to the selected class endpoint. Separate progress messages cover
-   authentication and loading the collection. The returned `keypass` is used in
-   `GET /dashboard/{keypass}` before navigating. Errors distinguish rejected
-   credentials, DNS failures, secure-connection failures, timeouts, other connection
-   problems, server failures, and unexpected responses.
-   A request that takes longer than 10 seconds shows a waiting notice. Cancel
-   stops the request and restores the form, including during collection loading.
-   If the dashboard request fails after authentication, the login screen explains
-   the failure and allows another sign-in attempt.
-2. **Dashboard:** a RecyclerView displays entity summaries excluding the
-   `description` field. It shows the number returned and the API's `entityTotal`.
-   Refresh is in the toolbar; empty results and request failures include a retry
-   action. The overflow menu provides Sign out. Tapping an item opens Details.
-3. **Details:** shows every returned field, including description. Field labels
-   are made readable; null/blank values use a placeholder, nested objects and
-   arrays use formatted JSON, and a missing description is explained. The screen
-   scrolls and supports text selection. System Back or the toolbar arrow returns
-   to the collection.
+Both input fields start blank. Enter your own class credentials:
 
-No personal credentials are embedded in the application or configuration. Inputs
-are not persisted or logged, network bodies are not logged, and application
-backup is disabled. A password is cleared from the form on successful sign-in.
-The non-credential keypass is retained through Android's saved-state mechanism
-so the dashboard can reload after process recreation. Sign out clears it.
-Closing and relaunching the app normally begins at Login.
+- **Student ID:** digits only, without the `s` prefix.
+- **Password:** your first name with the exact capitalization required by the
+  class. The app sends it as entered, so check for accidental spaces too.
+- **Class location:** select the location where you attend the class.
 
-## Architecture and dependency injection
+For my class, I select **Footscray**. Sydney and BR are also available. The
+selector starts with **Select your class location** so the person using the app
+can choose their own location.
 
-The single `app` module uses MVVM with XML layouts and View Binding:
+The configuration is in
+[AppConfig.kt](app/src/main/java/au/edu/vu/studentidassignment2/config/AppConfig.kt).
+The current setting is `defaultLocation = null`. To preselect Footscray, change it
+to `ClassLocation.FOOTSCRAY`; the other options are `ClassLocation.SYDNEY` and
+`ClassLocation.BR`. The selector remains available on the login screen.
 
-```text
-config/          API URL and explicit class-location configuration
-domain/          Entity, field, dashboard and typed failure models
-data/            Retrofit API, repository interface/implementation, JSON parser
-di/              Koin module for network, repository, parser and ViewModels
-ui/login/        Login Fragment and ViewModel
-ui/dashboard/    Dashboard Fragment, ViewModel and RecyclerView ListAdapter
-ui/details/      Details Fragment and ViewModel
-```
+The API base URL is `https://nit3213apinew.onrender.com/`. Authentication uses
+`POST /footscray/auth`, `/sydney/auth` or `/br/auth`, with `username` and `password`
+in the JSON body. After authentication, the app requests
+`GET /dashboard/{keypass}` and opens the dashboard when the data is ready.
 
-Koin starts in `AssignmentApplication`. It constructs the singleton OkHttp client,
-Retrofit service, parser and repository, then injects the repository and Android
-`SavedStateHandle` into the relevant ViewModels. Fragments obtain ViewModels
-through Koin; MainActivity and Dashboard share an activity-scoped dashboard
-ViewModel. Tests replace external behavior with fakes or a local mock server.
+Personal credentials are not included in the source code. The app does not save
+or log the login inputs, and the password field is cleared after a successful
+sign-in.
 
-ViewModels expose immutable `StateFlow` interfaces and use `viewModelScope` for
-requests. Fragments collect only while their **view** lifecycle is STARTED and
-release View Binding/RecyclerView references when their views are destroyed.
-Requests survive rotation, duplicate submissions are suppressed, cancellation
-propagates, and error states can be retried. The dashboard keypass is restored
-through `SavedStateHandle`; a selected entity's JSON travels in Fragment arguments
-and is restored by the Details ViewModel. Large collections are not bundled or
-persisted: only the selected item is passed to Details.
+## How I organised the code
 
-The parser preserves each entity's individual fields rather than imposing a
-fixed topic schema. It validates the dashboard response and rejects malformed
-responses instead of disguising them as an empty list.
+I used MVVM with Fragments, XML layouts and View Binding. The UI displays the
+state from its ViewModel, while the repository handles API access and response
+parsing.
 
-## Build and test
+| Folder | Responsibility |
+| --- | --- |
+| `config/` | API address, timeouts and class-location settings |
+| `domain/` | Entity, dashboard and error models |
+| `data/` | Retrofit service, repository and JSON parser |
+| `di/` | Koin dependency definitions |
+| `ui/login/` | Login screen and ViewModel |
+| `ui/dashboard/` | Dashboard screen, ViewModel and RecyclerView adapter |
+| `ui/details/` | Details screen and ViewModel |
 
-From the repository root in Windows PowerShell:
+Koin starts in `AssignmentApplication` and provides the OkHttp client, Retrofit
+service, parser, repository and ViewModels. This also lets the tests replace the
+repository with a fake.
+
+ViewModels use `StateFlow` and `viewModelScope`. Fragments collect state while
+their views are started and clear their bindings when the views are destroyed.
+A request can continue through rotation without being submitted again.
+`SavedStateHandle` keeps the dashboard keypass for restoration; signing out
+clears it. The selected item's JSON is passed to the Details screen in Fragment
+arguments.
+
+## Building and testing
+
+Run these commands from the project root in Windows PowerShell:
 
 ```powershell
 .\gradlew.bat :app:assembleDebug
@@ -127,76 +120,49 @@ From the repository root in Windows PowerShell:
 .\gradlew.bat :app:lintDebug
 ```
 
-Or run all checks together:
+On macOS or Linux, use `sh ./gradlew` instead of `.\gradlew.bat`.
 
-```powershell
-.\gradlew.bat :app:assembleDebug :app:testDebugUnitTest :app:lintDebug
-```
+The debug APK is saved to `app/build/outputs/apk/debug/app-debug.apk`. Unit-test
+reports are in `app/build/reports/tests/testDebugUnitTest/`, and lint reports are
+in `app/build/reports/`.
 
-On macOS/Linux use `sh ./gradlew` in place of `.\gradlew.bat`.
-The debug APK is generated at `app/build/outputs/apk/debug/app-debug.apk`.
-Unit-test reports are under `app/build/reports/tests/testDebugUnitTest/` and lint
-reports under `app/build/reports/`.
-
-With a running emulator or connected device, also run the screen regression tests:
+With an emulator running or a phone connected, run the screen tests with:
 
 ```powershell
 .\gradlew.bat :app:connectedDebugAndroidTest
 ```
 
-These device tests check real login-screen startup, blank fields, activity
-recreation, location validation, collection cards, and complete Details rendering
-using local sample data, plus cancellation of a pending sign-in through a fake
-repository. They do not make API requests. Their report
-is under `app/build/reports/androidTests/connected/debug/`.
+The unit tests cover input validation, loading and success states, errors,
+retries, cancellation, session restoration, JSON parsing and dependency
+injection. API contract tests use MockWebServer to check the request paths,
+methods, bodies and response handling.
 
-Tests cover login validation, loading/authentication/dashboard transitions,
-failure and retry behavior, duplicate request suppression, empty dashboards,
-sign-out cancellation, restored sessions, Details restoration, heterogeneous
-fields, malformed payloads, HTTP methods/paths/JSON bodies for every campus,
-error classification, cancellation, and construction of the production Koin
-dependency graph. Coroutines use a controlled test dispatcher. All HTTP contract
-tests use **MockWebServer on localhost**, never the live assignment API.
+The device tests cover blank login fields, validation, activity recreation,
+sign-in navigation, timeout recovery, cancellation, collection cards and Details.
+They use fake responses and do not depend on the live API. Gradle saves their
+reports in `app/build/reports/androidTests/connected/debug/`.
 
-For a manual end-to-end check, run the app, select your actual class location,
-enter your own credentials, inspect summaries and details, refresh, rotate the
-device, navigate back, and sign out. Check the error state with networking disabled.
-Successful live authentication requires valid class credentials; automated tests
-do not establish live API availability or acceptance of those credentials.
+For a manual check, sign in with valid class credentials, open an item, go back,
+refresh the dashboard, rotate the device and sign out. Turning off the device's
+internet connection also lets you check the network error message.
 
-### Troubleshooting sign-in
+## If sign-in takes too long
 
-- Select your actual class location and use your numeric student ID (no `s`).
-  The password is your first name with the capitalization required by your class.
-- HTTP 400 produces a request-format error; HTTP 401 or 403 produces a
-  sign-in-details rejection. The login error includes the HTTP status so it can
-  be reported without sharing credentials. These statuses alone do not identify
-  which input is incorrect. Confirm your details and campus with your class materials.
-- A connection error is different from rejected credentials. Open
-  `https://nit3213apinew.onrender.com/` in the **device or emulator's browser**.
-  If it cannot connect, check that device's network, VPN/proxy and DNS settings.
-  A working connection on the host computer does not establish emulator access.
-- For a timeout, wait a moment and retry; the hosted service may be starting up.
-  Network limits in `AppConfig.kt` allow 30 seconds to connect, 180 seconds without
-  receiving response data, and 210 seconds for the complete HTTP call. This gives
-  a sleeping hosted service time to start while keeping every request bounded.
-  Authentication is not automatically replayed. A timeout cannot determine
-  whether credentials are correct. If the button says **Loading your collection**,
-  authentication already succeeded and the dashboard request is the slow stage.
-  Cancel remains available while waiting; rotation preserves the active request.
-  For a secure-connection error, check the device date and time. Do not disable
-  HTTPS certificate verification.
-- If Android displays **System UI isn't responding**, restart or cold boot the
-  emulator from Device Manager. That system dialog is separate from an API error.
-  If the computer is short of RAM, close unused applications or use a physical
-  Android device. After a command-line build, `./gradlew --stop` (Windows:
-  `.\gradlew.bat --stop`) releases idle Gradle daemons.
+The button shows **Signing in** during authentication and **Loading your
+collection** after the API has accepted the login. This helps identify which
+request is taking time. After 10 seconds, the screen shows a waiting message.
+You can cancel and try again.
 
-## Version control and submission
+The hosted API can be slow to respond. The limits in `AppConfig.kt` are 30
+seconds to connect, a 180-second read timeout and 210 seconds for each complete
+HTTP call. A timeout alone does not mean the credentials are wrong.
 
-The original Git history is retained. Source, tests, build scripts, Gradle wrapper
-and this README belong in the submitted repository. Machine-specific IDE files,
-SDK settings, build outputs and the two root-level assignment references are
-ignored. The DOCX and rubric PDF stay on the local computer and are not part of
-the application repository. Submit the repository URL after pushing the reviewed
-commits to your own Git remote.
+- For a DNS or connection error, try opening the API base URL in the phone or
+  emulator's browser and check that device's internet connection.
+- For a rejected login, check the student ID, first-name capitalization and
+  class location. The app includes the HTTP status when the server returns one.
+- If the button has reached **Loading your collection**, authentication has
+  succeeded and the delay is in the dashboard request.
+- For a secure-connection error, check the device's date and time.
+- If the emulator becomes unresponsive or shows a System UI error, restart it
+  or run the app on a physical phone.
