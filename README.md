@@ -29,7 +29,7 @@ model flexible rather than building the screens around one fixed set of fields.
 You will need:
 
 - Android Studio with support for Android Gradle Plugin 8.5.2.
-- JDK 17.
+- JDK 17 and above.
 - Android SDK Platform 34 and Build Tools 34.0.0.
 - An emulator or phone running Android 8.0 (API 26) or later.
 - Internet access to download dependencies and use the API.
@@ -41,12 +41,12 @@ The project uses Kotlin 1.9.24 and Gradle 8.7. The Gradle wrapper is included.
 2. Allow the Gradle sync to finish. Install any missing SDK components when
    Android Studio prompts for them.
 3. In **Settings > Build, Execution, Deployment > Build Tools > Gradle**, select
-   **JDK 17** as the Gradle JDK.
+   **JDK 17 or above** as the Gradle JDK.
 4. Select the **app** run configuration and your emulator or connected phone,
    then click **Run**.
 
 Android Studio normally creates `local.properties` with the SDK location. For a
-command-line build, set `JAVA_HOME` to JDK 17 and either set `ANDROID_HOME` or
+command-line build, set `JAVA_HOME` to JDK 17 or above and either set `ANDROID_HOME` or
 provide the SDK path in `local.properties`. Use forward slashes in Windows SDK
 paths. No API key or extra account setup is needed for the app.
 
